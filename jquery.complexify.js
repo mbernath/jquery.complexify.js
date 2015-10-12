@@ -8,7 +8,6 @@
   $.fn.extend({
     complexify: function(options, callback) {
 
-      var MIN_COMPLEXITY = 49; // 12 chars with Upper, Lower and Number
       var MAX_COMPLEXITY = 120; //  25 chars, all charsets
       var CHARSETS = [
         // Commonly Used
@@ -116,7 +115,8 @@
         minimumChars: 8,
         strengthScaleFactor: 1,
         bannedPasswords: window.COMPLEXIFY_BANLIST || [],
-        banMode: 'strict' // (strict|loose)
+        banMode: 'strict', // (strict|loose)
+        minComplexity: 49 // 12 chars with Upper, Lower and Number
       };
 
       if($.isFunction(options) && !callback) {
@@ -167,7 +167,7 @@
         // Use natural log to produce linear scale
         complexity = Math.log(Math.pow(complexity, password.length)) * (1/options.strengthScaleFactor);
 
-        valid = (complexity > MIN_COMPLEXITY && password.length >= options.minimumChars);
+        valid = (complexity > options.minComplexity && password.length >= options.minimumChars);
 
         // Scale to percentage, so it can be used for a progress bar
         complexity = (complexity / MAX_COMPLEXITY) * 100;
